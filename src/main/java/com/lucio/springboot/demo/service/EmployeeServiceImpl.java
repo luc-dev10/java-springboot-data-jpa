@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -20,7 +21,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getEmployee(int id) {
-        return employeeJpaRepository.getById(id);
+        Optional<Employee> employeeOptional = employeeJpaRepository.findById(id);
+        return employeeOptional.orElse(null);
     }
 
     @Override
@@ -30,8 +32,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployee(int id) {
-        Employee employee = employeeJpaRepository.getById(id);
-        employeeJpaRepository.delete(employee);
+        Optional<Employee> employeeOptional = employeeJpaRepository.findById(id);
+        employeeOptional.ifPresent(employee -> employeeJpaRepository.delete(employee));
     }
 
     @Override
